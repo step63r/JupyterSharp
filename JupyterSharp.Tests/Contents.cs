@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net;
+using JupyterSharp.Common;
 
 namespace JupyterSharp.Tests
 {
@@ -9,7 +11,7 @@ namespace JupyterSharp.Tests
         /// <summary>
         /// アクセストークン
         /// </summary>
-        private static string TestToken = "9e8d30165c554b77790134de46d4109c3d41feb76e9545b0";
+        private static string TestToken = "add8cc6e1b4ea33806d6350eb478bb0c77a75449587c013b";
 
         /// <summary>
         /// ルートディレクトリのファイル一覧が取得できること
@@ -19,7 +21,7 @@ namespace JupyterSharp.Tests
         {
             var api = new Api(TestToken);
             var ret = api.GetContents();
-            Assert.AreEqual(System.Net.HttpStatusCode.OK, ret.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, ret.StatusCode);
         }
 
         /// <summary>
@@ -30,20 +32,56 @@ namespace JupyterSharp.Tests
         {
             var api = new Api(TestToken);
             var ret = api.GetContents("/Documents/T1048250-SSH000001_private");
-            Assert.AreEqual(System.Net.HttpStatusCode.OK, ret.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, ret.StatusCode);
         }
 
         /// <summary>
-        /// ルートディレクトリにファイルがアップロードできること
+        /// ファイルが作成できること
         /// </summary>
         [TestMethod]
-        public void PutContentsRootDirectoryOK()
+        public void PostContentsOK()
+        {
+            var api = new Api(TestToken);
+            var ret = api.PostContents();
+            Assert.AreEqual(HttpStatusCode.Created, ret.StatusCode);
+        }
+
+        /// <summary>
+        /// ファイル名が変更できること
+        /// </summary>
+        [TestMethod]
+        public void PatchContentsFileOK()
+        {
+            var api = new Api(TestToken);
+            var create = api.PostContents();
+            var createResult = JsonConverter.ToObject<FileSystemEntity>(create.Content);
+            Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
+            var rename = api.PatchContents(string.Format("/{0}", createResult.name), "RENAMED");
+            Assert.AreEqual(HttpStatusCode.OK, rename.StatusCode);
+        }
+
+        /// <summary>
+        /// ファイルがアップロードできること
+        /// </summary>
+        [TestMethod]
+        public void PutContentsOK()
         {
             string filepath = @"../../../SampleFile.txt";
 
             var api = new Api(TestToken);
             var ret = api.PutContents(filepath);
-            Assert.AreEqual(System.Net.HttpStatusCode.Created, ret.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Created, ret.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteContentsOK()
+        {
+            var api = new Api(TestToken);
+            var create = api.PostContents();
+            var createResult = JsonConverter.ToObject<FileSystemEntity>(create.Content);
+            Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
+            var delete = api.DeleteContents(string.Format("/{0}", createResult.name));
+            Assert.AreEqual(HttpStatusCode.NoContent, delete.StatusCode);
         }
     }
 }

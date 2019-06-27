@@ -1,20 +1,22 @@
-﻿using RestSharp;
+﻿using JupyterSharp.Common;
+using RestSharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace JupyterSharp
 {
     public partial class Api
     {
-        public IRestResponse GetContents(string path = "", string encoding = "UTF-8")
+        /// <summary>
+        /// Get contents of file or directory
+        /// </summary>
+        /// <param name="path">Path of file or directory</param>
+        /// <returns></returns>
+        public IRestResponse GetContents(string path = "/")
         {
-            var client = new RestClient(new Uri(string.Format("http://{0}:{1}", Address, Port)));
-            client.Encoding = Encoding.GetEncoding(encoding);
-
-            var request = new RestRequest(string.Format("{0}{1}", EndPoints.Contents, path), Method.GET);
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, path)));
+            var request = new RestRequest(Method.GET);
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Authorization", string.Format("Token {0}", Token));
 
@@ -23,18 +25,64 @@ namespace JupyterSharp
             return response;
         }
 
-        public IRestResponse PutContents(string srcpath, string dstpath = "", string encoding = "UTF-8")
+        /// <summary>
+        /// Create a new file in the specified path
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns></returns>
+        public IRestResponse PostContents(string path = "/")
         {
-            var client = new RestClient(new Uri(string.Format("http://{0}:{1}", Address, Port)));
-            client.Encoding = Encoding.GetEncoding(encoding);
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, path)));
+            var request = new RestRequest(Method.POST);
 
-            dstpath = string.IsNullOrEmpty(dstpath) ? "/" : dstpath;
-            //var request = new RestRequest(string.Format("{0}{1}", dstpath, Path.GetFileName(srcpath)), Method.PUT);
-            var request = new RestRequest(string.Format("{0}{1}", EndPoints.Contents, dstpath), Method.PUT);
-            //request.AddHeader("Accept", "application/json");
+            client.Encoding = Encoding.GetEncoding("UTF-8");
             request.AddHeader("Authorization", string.Format("Token {0}", Token));
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        //public IRestResponse PostContents(ContentsPostRequest body, string path = "/")
+        //{
+
+        //}
+
+        public IRestResponse PatchContents(string oldPath, string newPath)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, oldPath)));
+            var request = new RestRequest(Method.PATCH);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            var postData = new ContentsPatchRequest()
+            {
+                path = newPath
+            };
+
+            request.AddJsonBody(postData);
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Save or upload file
+        /// </summary>
+        /// <param name="srcpath">Local file path</param>
+        /// <param name="dstpath">Remote target directory</param>
+        /// <returns></returns>
+        public IRestResponse PutContents(string srcpath, string dstpath = "/")
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}{4}", Address, Port, EndPoints.Contents, dstpath, Path.GetFileName(srcpath))));
+            var request = new RestRequest(Method.PUT);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
             string enc_content = "";
             using (var sr = new StreamReader(new FileStream(srcpath, FileMode.Open)))
@@ -46,13 +94,32 @@ namespace JupyterSharp
             var postData = new ContentsPutRequest()
             {
                 name = Path.GetFileName(srcpath),
-                path = srcpath,
+                path = dstpath,
                 type = "file",
                 format = "base64",
                 content = enc_content
             };
 
             request.AddJsonBody(postData);
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Delete a file in the given path
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns></returns>
+        public IRestResponse DeleteContents(string path)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, path)));
+            var request = new RestRequest(Method.DELETE);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
             var response = client.Execute(request);
 
             return response;
