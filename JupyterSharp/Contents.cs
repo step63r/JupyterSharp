@@ -165,11 +165,11 @@ namespace JupyterSharp
         /// Restore a file to a particular checkpointed state
         /// </summary>
         /// <param name="path">File path</param>
-        /// <param name="id">Checkpoint ID for a file</param>
+        /// <param name="checkpoint_id">Checkpoint ID for a file</param>
         /// <returns></returns>
-        public IRestResponse RestoreCheckpoint(string path, string id)
+        public IRestResponse RestoreCheckpoint(string path, string checkpoint_id)
         {
-            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, id)));
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, checkpoint_id)));
             var request = new RestRequest(Method.POST);
 
             client.Encoding = Encoding.GetEncoding("UTF-8");
@@ -185,11 +185,11 @@ namespace JupyterSharp
         /// Delete a checkpoint
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="id"></param>
+        /// <param name="checkpoint_id"></param>
         /// <returns></returns>
-        public IRestResponse DeleteCheckpoint(string path, string id)
+        public IRestResponse DeleteCheckpoint(string path, string checkpoint_id)
         {
-            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, id)));
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, checkpoint_id)));
             var request = new RestRequest(Method.DELETE);
 
             client.Encoding = Encoding.GetEncoding("UTF-8");

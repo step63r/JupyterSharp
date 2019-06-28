@@ -54,7 +54,7 @@ namespace JupyterSharp.Tests
         {
             var api = new Api(TestToken);
             var create = api.PostContents();
-            var createResult = JsonConverter.ToObject<FileSystemEntity>(create.Content);
+            var createResult = JsonConverter.ToObject<Common.Contents>(create.Content);
             Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
             var rename = api.PatchContents(string.Format("/{0}", createResult.name), "RENAMED");
             Assert.AreEqual(HttpStatusCode.OK, rename.StatusCode);
@@ -78,7 +78,7 @@ namespace JupyterSharp.Tests
         {
             var api = new Api(TestToken);
             var create = api.PostContents();
-            var createResult = JsonConverter.ToObject<FileSystemEntity>(create.Content);
+            var createResult = JsonConverter.ToObject<Common.Contents>(create.Content);
             Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
             var delete = api.DeleteContents(string.Format("/{0}", createResult.name));
             Assert.AreEqual(HttpStatusCode.NoContent, delete.StatusCode);
