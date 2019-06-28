@@ -39,10 +39,10 @@ namespace JupyterSharp.Tests
         /// ファイルが作成できること
         /// </summary>
         [TestMethod]
-        public void PostContentsOK()
+        public void CreateContentOK()
         {
             var api = new Api(TestToken);
-            var ret = api.PostContents();
+            var ret = api.CreateContent();
             Assert.AreEqual(HttpStatusCode.Created, ret.StatusCode);
         }
 
@@ -50,13 +50,13 @@ namespace JupyterSharp.Tests
         /// ファイル名が変更できること
         /// </summary>
         [TestMethod]
-        public void PatchContentsFileOK()
+        public void RenameContentOK()
         {
             var api = new Api(TestToken);
-            var create = api.PostContents();
+            var create = api.CreateContent();
             var createResult = JsonConverter.ToObject<Common.Contents>(create.Content);
             Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
-            var rename = api.PatchContents(string.Format("/{0}", createResult.name), "RENAMED");
+            var rename = api.RenameContent(string.Format("/{0}", createResult.name), "RENAMED");
             Assert.AreEqual(HttpStatusCode.OK, rename.StatusCode);
         }
 
@@ -64,23 +64,23 @@ namespace JupyterSharp.Tests
         /// ファイルがアップロードできること
         /// </summary>
         [TestMethod]
-        public void PutContentsOK()
+        public void SaveUploadContentOK()
         {
             string filepath = @"../../../SampleFile.txt";
 
             var api = new Api(TestToken);
-            var ret = api.PutContents(filepath);
+            var ret = api.SaveUploadContent(filepath);
             Assert.AreEqual(HttpStatusCode.Created, ret.StatusCode);
         }
 
         [TestMethod]
-        public void DeleteContentsOK()
+        public void DeleteContentOK()
         {
             var api = new Api(TestToken);
-            var create = api.PostContents();
+            var create = api.CreateContent();
             var createResult = JsonConverter.ToObject<Common.Contents>(create.Content);
             Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
-            var delete = api.DeleteContents(string.Format("/{0}", createResult.name));
+            var delete = api.DeleteContent(string.Format("/{0}", createResult.name));
             Assert.AreEqual(HttpStatusCode.NoContent, delete.StatusCode);
         }
     }

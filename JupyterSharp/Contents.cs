@@ -30,7 +30,7 @@ namespace JupyterSharp
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns></returns>
-        public IRestResponse PostContents(string path = "/")
+        public IRestResponse CreateContent(string path = "/")
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, path)));
             var request = new RestRequest(Method.POST);
@@ -49,7 +49,7 @@ namespace JupyterSharp
 
         //}
 
-        public IRestResponse PatchContents(string oldPath, string newPath)
+        public IRestResponse RenameContent(string oldPath, string newPath)
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, oldPath)));
             var request = new RestRequest(Method.PATCH);
@@ -75,7 +75,7 @@ namespace JupyterSharp
         /// <param name="srcpath">Local file path</param>
         /// <param name="dstpath">Remote target directory</param>
         /// <returns></returns>
-        public IRestResponse PutContents(string srcpath, string dstpath = "/")
+        public IRestResponse SaveUploadContent(string srcpath, string dstpath = "/")
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}{4}", Address, Port, EndPoints.Contents, dstpath, Path.GetFileName(srcpath))));
             var request = new RestRequest(Method.PUT);
@@ -111,7 +111,7 @@ namespace JupyterSharp
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns></returns>
-        public IRestResponse DeleteContents(string path)
+        public IRestResponse DeleteContent(string path)
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, path)));
             var request = new RestRequest(Method.DELETE);
