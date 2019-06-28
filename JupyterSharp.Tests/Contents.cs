@@ -11,7 +11,7 @@ namespace JupyterSharp.Tests
         /// <summary>
         /// アクセストークン
         /// </summary>
-        private static string TestToken = "add8cc6e1b4ea33806d6350eb478bb0c77a75449587c013b";
+        private static string TestToken = "af35d501051273b60c5b7297cdadc0fd62e2ea8e6e50324c";
 
         /// <summary>
         /// ルートディレクトリのファイル一覧が取得できること

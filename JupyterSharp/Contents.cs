@@ -124,5 +124,81 @@ namespace JupyterSharp
 
             return response;
         }
+
+        /// <summary>
+        /// Get a list of checkpoints for a file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns></returns>
+        public IRestResponse GetCheckpoints(string path)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints", Address, Port, EndPoints.Contents, path)));
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Create a new checkpoint for a file
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <returns></returns>
+        public IRestResponse CreateCheckpoint(string path)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints", Address, Port, EndPoints.Contents, path)));
+            var request = new RestRequest(Method.POST);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Restore a file to a particular checkpointed state
+        /// </summary>
+        /// <param name="path">File path</param>
+        /// <param name="id">Checkpoint ID for a file</param>
+        /// <returns></returns>
+        public IRestResponse RestoreCheckpoint(string path, string id)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, id)));
+            var request = new RestRequest(Method.POST);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            var response = client.Execute(request);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Delete a checkpoint
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IRestResponse DeleteCheckpoint(string path, string id)
+        {
+            var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints/{4}", Address, Port, EndPoints.Contents, path, id)));
+            var request = new RestRequest(Method.DELETE);
+
+            client.Encoding = Encoding.GetEncoding("UTF-8");
+            request.AddHeader("Authorization", string.Format("Token {0}", Token));
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            var response = client.Execute(request);
+
+            return response;
+        }
     }
 }
