@@ -25,7 +25,7 @@ namespace JupyterSharp.Tests.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("af35d501051273b60c5b7297cdadc0fd62e2ea8e6e50324c")]
+        [global::System.Configuration.DefaultSettingValueAttribute("cc8b71f2a95707af8cf0bade12f6563fcca5f0d8a7734bb7")]
         public string JupyterToken {
             get {
                 return ((string)(this["JupyterToken"]));

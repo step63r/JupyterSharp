@@ -131,7 +131,7 @@ namespace JupyterSharp
         /// </summary>
         /// <param name="path">File path</param>
         /// <returns></returns>
-        public IRestResponse GetCheckpoints(string path)
+        public IRestResponse GetCheckpoints(string path = "/")
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}/checkpoints", Address, Port, EndPoints.Contents, path)));
             var request = new RestRequest(Method.GET);
