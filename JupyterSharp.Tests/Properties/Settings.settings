@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="JupyterSharp.Tests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="JupyterToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">af35d501051273b60c5b7297cdadc0fd62e2ea8e6e50324c</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

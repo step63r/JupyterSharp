@@ -44,11 +44,12 @@ namespace JupyterSharp
             return response;
         }
 
-        //public IRestResponse PostContents(ContentsPostRequest body, string path = "/")
-        //{
-
-        //}
-
+        /// <summary>
+        /// Rename a file or directory without re-uploading content
+        /// </summary>
+        /// <param name="oldPath">File path</param>
+        /// <param name="newPath">New path for file or directory</param>
+        /// <returns></returns>
         public IRestResponse RenameContent(string oldPath, string newPath)
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}{3}", Address, Port, EndPoints.Contents, oldPath)));

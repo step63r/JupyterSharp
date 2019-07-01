@@ -11,7 +11,7 @@ namespace JupyterSharp.Tests
         /// <summary>
         /// アクセストークン
         /// </summary>
-        private static string TestToken = "af35d501051273b60c5b7297cdadc0fd62e2ea8e6e50324c";
+        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
 
         /// <summary>
         /// ルートディレクトリのファイル一覧が取得できること
@@ -73,6 +73,9 @@ namespace JupyterSharp.Tests
             Assert.AreEqual(HttpStatusCode.Created, ret.StatusCode);
         }
 
+        /// <summary>
+        /// ファイルが削除できること
+        /// </summary>
         [TestMethod]
         public void DeleteContentOK()
         {
@@ -82,6 +85,42 @@ namespace JupyterSharp.Tests
             Assert.AreEqual(HttpStatusCode.Created, create.StatusCode);
             var delete = api.DeleteContent(string.Format("/{0}", createResult.name));
             Assert.AreEqual(HttpStatusCode.NoContent, delete.StatusCode);
+        }
+
+        /// <summary>
+        /// Notebookのチェックポイント一覧が取得できること
+        /// </summary>
+        [TestMethod]
+        public void GetCheckpointsOK()
+        {
+
+        }
+
+        /// <summary>
+        /// Notebookにチェックポイントを生成できること
+        /// </summary>
+        [TestMethod]
+        public void CreateCheckpointOK()
+        {
+
+        }
+
+        /// <summary>
+        /// Notebookのチェックポイントを復元できること
+        /// </summary>
+        [TestMethod]
+        public void RestoreCheckpointOK()
+        {
+
+        }
+
+        /// <summary>
+        /// Notebookのチェックポイントを削除できること
+        /// </summary>
+        [TestMethod]
+        public void DeleteCheckpointOK()
+        {
+
         }
     }
 }

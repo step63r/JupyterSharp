@@ -54,10 +54,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contents.cs" />
+    <Compile Include="Kernels.cs" />
+    <Compile Include="Kernelspecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ApiSpec.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Config.cs" />
+    <Compile Include="Sessions.cs" />
+    <Compile Include="Status.cs" />
+    <Compile Include="Terminals.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JupyterSharp\JupyterSharp.csproj">
