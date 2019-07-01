@@ -9,9 +9,17 @@ namespace JupyterSharp.Tests
     public class Status
     {
         /// <summary>
-        /// アクセストークン
+        /// テスト用APIオブジェクト
         /// </summary>
-        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
+        public Api TestAPI;
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public Status()
+        {
+            TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+        }
 
         /// <summary>
         /// サーバステータスを取得できること

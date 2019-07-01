@@ -9,9 +9,17 @@ namespace JupyterSharp.Tests
     public class Sessions
     {
         /// <summary>
-        /// アクセストークン
+        /// テスト用APIオブジェクト
         /// </summary>
-        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
+        public Api TestAPI;
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public Sessions()
+        {
+            TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+        }
 
         /// <summary>
         /// セッション情報を取得できること
@@ -55,7 +63,9 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void CreateSessionOK()
         {
-
+            // TODO: (r-uchiyama) カーネルの取得が必要かもしれない
+            var createRequest = TestAPI.CreateSession();
+            Assert.AreEqual(HttpStatusCode.Created, createRequest.StatusCode);
         }
     }
 }

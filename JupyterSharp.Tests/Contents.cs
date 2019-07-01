@@ -1,7 +1,6 @@
-﻿using System;
+﻿using JupyterSharp.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
-using JupyterSharp.Common;
 
 namespace JupyterSharp.Tests
 {

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using JupyterSharp.Common;
+using System.Collections.Generic;
 
 namespace JupyterSharp.Tests
 {
@@ -9,9 +10,17 @@ namespace JupyterSharp.Tests
     public class Kernels
     {
         /// <summary>
-        /// アクセストークン
+        /// テスト用APIオブジェクト
         /// </summary>
-        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
+        public Api TestAPI;
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public Kernels()
+        {
+            TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+        }
 
         /// <summary>
         /// 起動中のカーネル一覧が取得できること
@@ -19,7 +28,9 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetKernelsOK()
         {
-
+            // カーネル一覧取得
+            var getRequest = TestAPI.GetKernels();
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
 
         /// <summary>
@@ -28,7 +39,9 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void StartKernelOK()
         {
-
+            // カーネル起動
+            var startRequest = TestAPI.StartKernel();
+            Assert.AreEqual(HttpStatusCode.Created, startRequest.StatusCode);
         }
 
         /// <summary>
@@ -37,7 +50,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetKernelOK()
         {
+            // カーネル起動
+            var startRequest = TestAPI.StartKernel();
+            var startResponse = JsonConverter.ToObject<Common.Kernel>(startRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, startRequest.StatusCode);
 
+            // カーネル情報取得
+            var getKernelRequest = TestAPI.GetKernel(startResponse.id);
+            Assert.AreEqual(HttpStatusCode.OK, getKernelRequest.StatusCode);
         }
 
         /// <summary>
@@ -46,7 +66,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void DeleteKernelOK()
         {
+            // カーネル起動
+            var startRequest = TestAPI.StartKernel();
+            var startResponse = JsonConverter.ToObject<Common.Kernel>(startRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, startRequest.StatusCode);
 
+            // カーネル停止
+            var deleteRequest = TestAPI.DeleteKernel(startResponse.id);
+            Assert.AreEqual(HttpStatusCode.NoContent, deleteRequest.StatusCode);
         }
 
         /// <summary>
@@ -55,7 +82,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void InterruptKernelOK()
         {
+            // カーネル起動
+            var startRequest = TestAPI.StartKernel();
+            var startResponse = JsonConverter.ToObject<Common.Kernel>(startRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, startRequest.StatusCode);
 
+            // カーネル中断
+            var interruptRequest = TestAPI.InterruptKernel(startResponse.id);
+            Assert.AreEqual(HttpStatusCode.NoContent, interruptRequest.StatusCode);
         }
 
         /// <summary>
@@ -64,7 +98,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void RestartKernelOK()
         {
+            // カーネル起動
+            var startRequest = TestAPI.StartKernel();
+            var startResponse = JsonConverter.ToObject<Common.Kernel>(startRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, startRequest.StatusCode);
 
+            // カーネル再起動
+            var restartRequest = TestAPI.RestartKernel(startResponse.id);
+            Assert.AreEqual(HttpStatusCode.OK, restartRequest.StatusCode);
         }
     }
 }

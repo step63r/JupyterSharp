@@ -37,12 +37,15 @@ namespace JupyterSharp
             request.AddHeader("Authorization", string.Format("Token {0}", Token));
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
-            var postData = new Dictionary<string, string>()
+            if (!string.IsNullOrEmpty(name))
             {
-                { "name", name }
-            };
+                var postData = new Dictionary<string, string>()
+                {
+                    { "name", name }
+                };
+                request.AddJsonBody(postData);
+            }
 
-            request.AddJsonBody(postData);
             var response = client.Execute(request);
 
             return response;

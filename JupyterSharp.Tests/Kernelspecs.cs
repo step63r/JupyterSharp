@@ -9,9 +9,17 @@ namespace JupyterSharp.Tests
     public class Kernelspecs
     {
         /// <summary>
-        /// アクセストークン
+        /// テスト用APIオブジェクト
         /// </summary>
-        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
+        public Api TestAPI;
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public Kernelspecs()
+        {
+            TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+        }
 
         /// <summary>
         /// カーネルスペックが取得できること
@@ -19,7 +27,9 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetKernelspecsOK()
         {
-
+            // カーネルスペック取得
+            var getRequest = TestAPI.GetKernelspecs();
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
     }
 }

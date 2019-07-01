@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
-using JupyterSharp.Common;
 
 namespace JupyterSharp.Tests
 {
@@ -9,9 +7,17 @@ namespace JupyterSharp.Tests
     public class ApiSpec
     {
         /// <summary>
-        /// アクセストークン
+        /// テスト用APIオブジェクト
         /// </summary>
-        private static readonly string TestToken = Properties.Settings.Default.JupyterToken;
+        public Api TestAPI;
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public ApiSpec()
+        {
+            TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+        }
 
         /// <summary>
         /// Jupyter Notebook Server APIスペックが取得できること
@@ -19,7 +25,9 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetApiSpecOK()
         {
-
+            // APIスペック取得
+            var getRequest = TestAPI.GetApiSpec();
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
     }
 }

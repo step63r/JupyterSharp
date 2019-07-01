@@ -1,6 +1,7 @@
 ﻿using JupyterSharp.Common;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace JupyterSharp
@@ -87,7 +88,7 @@ namespace JupyterSharp
         /// </summary>
         /// <param name="model">A session</param>
         /// <returns></returns>
-        public IRestResponse CreateSession(Session session)
+        public IRestResponse CreateSession(string name = "")
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}", Address, Port, EndPoints.Sessions)));
             var request = new RestRequest(Method.POST);
@@ -96,7 +97,10 @@ namespace JupyterSharp
             request.AddHeader("Authorization", string.Format("Token {0}", Token));
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
-            var postData = new Session();
+            var postData = new Session()
+            {
+                name = name
+            };
 
             request.AddJsonBody(postData);
             var response = client.Execute(request);
