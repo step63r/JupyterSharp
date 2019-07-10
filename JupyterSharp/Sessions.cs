@@ -28,10 +28,11 @@ namespace JupyterSharp
         /// <summary>
         /// This can be used to rename the session
         /// </summary>
-        /// <param name="model">A session</param>
+        /// <param name="kernel">Kernel information</param>
         /// <param name="session">Session UUID</param>
+        /// <param name="name">Name of the session</param>
         /// <returns></returns>
-        public IRestResponse RenameSession(Session model, string session)
+        public IRestResponse RenameSession(Kernel kernel, string session, string name)
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}/{3}", Address, Port, EndPoints.Sessions, session)));
             var request = new RestRequest(Method.PATCH);
@@ -40,7 +41,11 @@ namespace JupyterSharp
             request.AddHeader("Authorization", string.Format("Token {0}", Token));
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
-            var postData = new Session();
+            var postData = new Session()
+            {
+                name = name,
+                kernel = kernel
+            };
 
             request.AddJsonBody(postData);
             var response = client.Execute(request);
@@ -86,9 +91,10 @@ namespace JupyterSharp
         /// <summary>
         /// Create a new session, or return an existing session if a session of the same name already exists
         /// </summary>
-        /// <param name="model">A session</param>
+        /// <param name="kernel">Kernel information</param>
+        /// <param name="name">Name of the session</param>
         /// <returns></returns>
-        public IRestResponse CreateSession(string name = "")
+        public IRestResponse CreateSession(Kernel kernel, string name = "")
         {
             var client = new RestClient(new Uri(string.Format("http://{0}:{1}{2}", Address, Port, EndPoints.Sessions)));
             var request = new RestRequest(Method.POST);
@@ -99,7 +105,8 @@ namespace JupyterSharp
 
             var postData = new Session()
             {
-                name = name
+                name = name,
+                kernel = kernel
             };
 
             request.AddJsonBody(postData);

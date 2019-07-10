@@ -12,6 +12,10 @@ namespace JupyterSharp.Tests
         /// テスト用APIオブジェクト
         /// </summary>
         public Api TestAPI;
+        /// <summary>
+        /// テストカーネルオブジェクト
+        /// </summary>
+        public Kernel TestKernel;
 
         /// <summary>
         /// コンストラクタ
@@ -19,6 +23,10 @@ namespace JupyterSharp.Tests
         public Sessions()
         {
             TestAPI = new Api(Properties.Settings.Default.JupyterToken);
+
+            // カーネル生成
+            var startRequest = TestAPI.StartKernel();
+            TestKernel = JsonConverter.ToObject<Common.Kernel>(startRequest.Content);
         }
 
         /// <summary>
@@ -27,7 +35,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetSessionOK()
         {
+            // セッション生成
+            var createRequest = TestAPI.CreateSession(TestKernel, Guid.NewGuid().ToString());
+            var createResponse = JsonConverter.ToObject<Session>(createRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, createRequest.StatusCode);
 
+            // セッション情報取得
+            var getRequest = TestAPI.GetSession(createResponse.id);
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
 
         /// <summary>
@@ -36,7 +51,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void RenameSessionOK()
         {
+            // セッション生成
+            var createRequest = TestAPI.CreateSession(TestKernel, Guid.NewGuid().ToString());
+            var createResponse = JsonConverter.ToObject<Session>(createRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, createRequest.StatusCode);
 
+            // セッション名変更
+            var renameRequest = TestAPI.RenameSession(TestKernel, createResponse.id, "TestName");
+            Assert.AreEqual(HttpStatusCode.OK, renameRequest.StatusCode);
         }
 
         /// <summary>
@@ -45,7 +67,14 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void DeleteSessionOK()
         {
+            // セッション生成
+            var createRequest = TestAPI.CreateSession(TestKernel, Guid.NewGuid().ToString());
+            var createResponse = JsonConverter.ToObject<Session>(createRequest.Content);
+            Assert.AreEqual(HttpStatusCode.Created, createRequest.StatusCode);
 
+            // セッション削除
+            var deleteRequest = TestAPI.DeleteSession(createResponse.id);
+            Assert.AreEqual(HttpStatusCode.NoContent, deleteRequest.StatusCode);
         }
 
         /// <summary>
@@ -54,7 +83,8 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetSessionsOK()
         {
-
+            var getRequest = TestAPI.GetSessions();
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
 
         /// <summary>
@@ -63,8 +93,8 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void CreateSessionOK()
         {
-            // TODO: (r-uchiyama) カーネルの取得が必要かもしれない
-            var createRequest = TestAPI.CreateSession();
+            // セッション生成
+            var createRequest = TestAPI.CreateSession(TestKernel, Guid.NewGuid().ToString());
             Assert.AreEqual(HttpStatusCode.Created, createRequest.StatusCode);
         }
     }

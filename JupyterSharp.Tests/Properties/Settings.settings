@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="JupyterToken" Type="System.String" Scope="User">
-      <Value Profile="(Default)">cc8b71f2a95707af8cf0bade12f6563fcca5f0d8a7734bb7</Value>
+      <Value Profile="(Default)">f056e2f5e5aae39205635344a0904bbf0345acdb6b614746</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -27,7 +27,8 @@ namespace JupyterSharp.Tests
         [TestMethod]
         public void GetStatusOK()
         {
-
+            var getRequest = TestAPI.GetStatus();
+            Assert.AreEqual(HttpStatusCode.OK, getRequest.StatusCode);
         }
     }
 }
